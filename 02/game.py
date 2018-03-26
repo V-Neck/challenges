@@ -10,24 +10,22 @@ from data import DICTIONARY, LETTER_SCORES, POUCH
 DICT_SET = set(DICTIONARY)
 NUM_LETTERS = 7
 
-
 def draw_letters():
-    """Pick NUM_LETTERS letters randomly. Hint: use stdlib random"""
-	return random.choices(POUCH, k=NUM_LETTERS)	
+	"""Pick NUM_LETTERS letters randomly. Hint: use stdlib random"""
+	return random.sample(POUCH, NUM_LETTERS)
 
 def input_word(draw):
-    """Ask player for a word and validate against draw.
+	"""Ask player for a word and validate against draw.
     Use _validation(word, draw) helper."""
-	
-	word = raw_input("Your word> ")
 	while True:
+		word = input("Your word> ").upper()
 		if _validation(word, draw):
 			return word
 		else:
-			print "That isn't valid"
+			print("That isn't valid")
 
 def _validation(word, draw):
-    """Validations: 1) only use letters of draw, 2) valid dictionary word"""
+	"""Validations: 1) only use letters of draw, 2) valid dictionary word"""
 	# copies draw
 	temp_draw = list(draw)
 	for char in word:
@@ -35,35 +33,30 @@ def _validation(word, draw):
 			temp_draw.remove(char)
 		else:
 			return False
-
 	return word in DICTIONARY
 
 # From challenge 01:
 def calc_word_value(word):
-    """Calc a given word value based on Scrabble LETTER_SCORES mapping"""
-    return sum(LETTER_SCORES.get(char.upper(), 0) for char in word)
-
+	"""Calc a given word value based on Scrabble LETTER_SCORES mapping"""
+	return sum(LETTER_SCORES.get(char.upper(), 0) for char in word)
 
 # Below 2 functions pass through the same 'draw' argument (smell?).
 # Maybe you want to abstract this into a class?
 # get_possible_dict_words and _get_permutations_draw would be instance methods.
 # 'draw' would be set in the class constructor (__init__).
 def get_possible_dict_words(draw):
-    """Get all possible words from draw which are valid dictionary words.
+	"""Get all possible words from draw which are valid dictionary words.
     Use the _get_permutations_draw helper and DICTIONARY constant"""
-	possibilities = []
-	perms = _get_permutations_draw(draw)
 	
-	for perm in perms:
-		if perm in DICT_SET:
-			possibilities.append(perm)
-	
-	return possibilities
+	return DICT_SET & _get_permutations_draw(draw)
 
 def _get_permutations_draw(draw):
-    """Helper for get_possible_dict_words to get all permutations of draw letters.
+	"""Helper for get_possible_dict_words to get all permutations of draw letters.
     Hint: use itertools.permutations"""
-	return itertools.permutations(draw)
+	permutations = []	
+	for i in range(1, NUM_LETTERS + 1):
+		permutations.extend(itertools.permutations(draw, i))
+	return set(["".join(perm).upper() for perm in permutations])
 
 # From challenge 01:
 def max_word_value(words):
