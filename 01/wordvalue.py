@@ -2,7 +2,8 @@ from data import DICTIONARY, LETTER_SCORES
 
 def load_words():
 	"""Load dictionary into a list and return list"""
-	words = open(DICTIONARY).read().split("\n")[:-1]
+	with open(DICTIONARY) as f:
+		words = f.read().split("\n")[:-1]
 	return [word.replace("-", "") for word in words]
 
 def calc_word_value(word):
@@ -18,19 +19,7 @@ def calc_word_value(word):
 def max_word_value(words=load_words()):
 	"""Calculate the word with the max value, can receive a list
     of words as arg, if none provided uses default DICTIONARY"""
-
-	if len(words) == 0:
-		raise ValueError("cannot find max value of empty list")
-	max_word = None
-	max_score = -1
-
-	for word in words:
-		word_score = calc_word_value(word)
-		if (word_score > max_score):
-			max_word = word
-			max_score = word_score
-
-	return max_word
+	return max(words, key = lambda x: calc_word_value(x))
 
 if __name__ == "__main__":
     pass # run unittests to validate
