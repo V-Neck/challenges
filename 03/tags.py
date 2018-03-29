@@ -16,7 +16,6 @@ def get_tags():
 		feed = f.read()
 	
 	tags = re.findall(r'<category>([^<]+)</category>', feed)
-	print(tags[:10])
 	return [tag.replace("-", " ").lower() for tag in tags]
 
 def get_top_tags(tags):
@@ -25,10 +24,11 @@ def get_top_tags(tags):
 
 def get_similarities(tags):
 	"""Find set of tags pairs with similarity ratio of > SIMILAR"""
-	return [pair for pair in combinations(tags, 2) if ratio(pair)]
+	pairs = combinations(set(tags), 2)
+	return [pair for pair in pairs if _is_similar(pair)]
 
-def ratio(pair):	
-	return SequenceMatcher(a=pair[0], b=pair[1]).ratio() > SIMILAR
+def _is_similar(pair):
+	return SequenceMatcher(a=pair[0], b=pair[1]).ratio() > SIMILAR 
 
 if __name__ == "__main__":
 	tags = get_tags()
