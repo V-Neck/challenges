@@ -25,15 +25,22 @@ class UserTweets(object):
 		auth.set_access_token(ACCESS_TOKEN, ACCESS_SECRET)
 		api = tweepy.API(auth)
 
-		TWEET_COUNT = 100
+		TWEET_COUNT = NUM_TWEETS
 
 		self.recent_tweets = api.user_timeline(handle, count=TWEET_COUNT)
 		
-		with open("data/some_handle.csv", 'w') as csvfile:
+		self.output_file = "data/some_handle.csv"	
+		
+		with open(self.output_file, 'w') as csvfile:
 			writer = csv.writer(csvfile)
 			for tw in self.recent_tweets:
 				writer.writerow([tw.id_str, tw.created_at, tw.text])
-
+		print(self.recent_tweets[0])
+		
+		with open(self.output_file, 'r') as csvfile:
+			reader = csv.reader(csvfile)
+			print(next(reader))
+				
 	def __len__(self):
 		return len(self.recent_tweets)
 
