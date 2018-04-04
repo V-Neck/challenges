@@ -35,12 +35,7 @@ class UserTweets(object):
 			writer = csv.writer(csvfile)
 			for tw in self.recent_tweets:
 				writer.writerow([tw.id_str, tw.created_at, tw.text])
-		print(self.recent_tweets[0])
-		
-		with open(self.output_file, 'r') as csvfile:
-			reader = csv.reader(csvfile)
-			print(next(reader))
-				
+			
 	def __len__(self):
 		return len(self.recent_tweets)
 
